@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <div class="card">
+        <h2>Welcome, {{ user.first_name }} 👋</h2>
+
+        {% if user.studentprofile %}
+            {% if not user.studentprofile.skills %}
+                <p>Please complete your profile to apply for internships.</p>
+            {% else %}
+                <p>Explore internships and apply now.</p>
+            {% endif %}
+        {% else %}
+            <p>Please complete your profile first.</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div class="card">
+    <h1>Welcome to HireHub 🚀</h1>
+    <p>
+        HireHub is a smart internship and placement platform designed to connect students 
+        with the right opportunities based on their skills.
+    </p>
+</div>
+
+<div class="card">
+    <h2>🎯 What We Offer</h2>
+    <ul>
+        <li>✔ Skill-based internship recommendations</li>
+        <li>✔ Easy application tracking</li>
+        <li>✔ Centralized student profile</li>
+        <li>✔ Real-time matching system</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>👨‍🎓 For Students</h2>
+    <p>
+        Build your profile, showcase your skills, and discover internships tailored just for you.
+    </p>
+</div>
+
+<div class="card">
+    <h2>🏢 For Recruiters</h2>
+    <p>
+        Post internships and find the best candidates quickly using our intelligent matching system.
+    </p>
+</div>
+
+{% if not user.is_authenticated %}
+<div class="card">
+    <h2>🚀 Get Started</h2>
+    <p>Create an account and start exploring opportunities today.</p>
+    <a href="/register/">Register Now</a>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>My Applications</h2>
+
+{% for app in applications %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h3>{{ app.internship.title }}</h3>
+        <p><strong>Company:</strong> {{ app.internship.company }}</p>
+        <p><strong>Status:</strong> {{ app.status }}</p>
+    </div>
+{% empty %}
+    <p>No applications yet.</p>
+{% endfor %}
+
+{% endblock %}

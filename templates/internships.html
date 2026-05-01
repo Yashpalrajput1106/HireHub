@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Available Internships</h2>
+
+{% for item in internships %}
+
+<div style="border:1px solid #ccc; padding:10px; margin:10px;">
+    
+    <h3>{{ item.obj.title }}</h3>
+    <p><strong>Company:</strong> {{ item.obj.company }}</p>
+    <p><strong>Skills:</strong> {{ item.obj.required_skills }}</p>
+
+    {% if user.is_authenticated %}
+        <p><strong>Match:</strong> {{ item.match }}%</p>
+
+        
+
+        {% if not user.studentprofile.phone or not user.studentprofile.college or not user.studentprofile.education or not user.studentprofile.skills or not user.studentprofile.resume %}
+            <button disabled class="btn btn-disabled">Complete Profile</button>
+
+        {% elif item.obj.id in applied_ids %}
+            <button disabled class="btn btn-disabled">Applied</button>
+
+        {% else %}
+            <a href="/apply/{{ item.obj.id }}/" class="btn">Apply</a>
+
+    
+
+{% endif %}
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

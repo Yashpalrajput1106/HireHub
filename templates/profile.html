@@ -1,14 +1,85 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-<h2>Your Profile</h2>
-<h4>Welcome, {{ request.user.first_name }} {{ request.user.last_name }}</h4>
+<div class="card">
+
+    <!-- HEADER -->
+    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+    <p>{{ request.user.email }}</p>
+
+    <!-- PROFILE STATUS -->
+    {% if profile.phone and profile.college and profile.education and profile.skills and profile.resume %}
+        <div class="status-box Complete">
+            Profile Completed
+        </div>
+
+    {% else %}
+        <div class="status-box Complete">
+            Profile Incomplete ❗ Please fill all required details
+        </div>
+    {% endif %}
+
+</div>
+
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Profile</button>
+
+    <!-- PERSONAL INFO -->
+    <div class="card">
+        <h3>👤 Personal Information</h3>
+
+        <label>Phone Number</label>
+        {{ form.phone }}
+
+        <label>College</label>
+        {{ form.college }}
+    </div>
+
+
+    <!-- EDUCATION -->
+    <div class="card">
+        <h3>🎓 Education</h3>
+
+        <label>Education Details</label>
+        {{ form.education }}
+    </div>
+
+
+    <!-- SKILLS -->
+    <div class="card">
+        <h3>💼 Skills</h3>
+
+        <label>Enter your skills</label>
+        {{ form.skills }}
+    </div>
+
+
+    <!-- RESUME -->
+    <div class="card">
+        <h3>📄 Resume</h3>
+
+        {{ form.resume }}
+
+        {% if profile.resume %}
+            <p style="color: green;">Resume Uploaded ✅</p>
+            <a href="{{ profile.resume.url }}" class="btn">View Resume</a>
+        {% else %}
+            <p style="color: red;">No Resume Uploaded</p>
+        {% endif %}
+    </div>
+
+
+    <!-- OPTIONAL -->
+    <div class="card">
+        <h3>🔗 LinkedIn (Optional)</h3>
+        {{ form.linkedin }}
+    </div>
+
+
+    <!-- SUBMIT -->
+    <button type="submit" class="btn">Save Profile</button>
+
 </form>
 
 {% endblock %}

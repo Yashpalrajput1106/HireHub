@@ -4,7 +4,11 @@ from django.shortcuts import render, redirect
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html')
+    total_applications = 0
+
+    if request.user.is_authenticated:
+        total_applications = Application.objects.filter(student = request.user).count()
+    return render(request, 'home.html',{'total_applications' : total_applications})
 
 
 def register(request):
@@ -21,6 +25,7 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 from .models import Internship
+from datetime import date
 
 def internships(request):
     data = Internship.objects.all()
@@ -54,7 +59,8 @@ def internships(request):
 
     return render(request, 'internships.html', {
         'internships': internship_list,
-        'applied_ids': applied_ids
+        'applied_ids': applied_ids,
+        'today' : date.today()
     })
 
 from .models import StudentProfile
@@ -73,7 +79,15 @@ def profile(request):
             form.save()
             return redirect('profile')
 
-    return render(request, 'profile.html', {'form': form})
+    is_complete = all([
+        profile.phone,
+        profile.college,
+        profile.education,
+        profile.skills,
+        profile.resume,
+    ])
+
+    return render(request, 'profile.html', {'form': form, 'profile' : profile, 'is_complete' : is_complete})
 
 from .models import Application
 

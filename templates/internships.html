@@ -1,38 +1,58 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
 <h2>Available Internships</h2>
 
-{% for item in internships %}
 
-<div style="border:1px solid #ccc; padding:10px; margin:10px;">
-    
+
+{% for item in internships %} 
+<div class="card">
+
     <h3>{{ item.obj.title }}</h3>
-    <p><strong>Company:</strong> {{ item.obj.company }}</p>
-    <p><strong>Skills:</strong> {{ item.obj.required_skills }}</p>
 
+    <p><b>Company:</b> {{ item.obj.company }}</p>
+    <p><b>Skills:</b> {{ item.obj.required_skills }}</p>
+
+    <!-- MATCH -->
+    <p>
+        <b>Match:</b>
+        <span class="{% if item.match > 70 %}high{% elif item.match > 40 %}medium{% else %}low{% endif %}">
+            {{ item.match }}%
+        </span>
+    </p>
+
+    <!-- ✅ JOB DESCRIPTION -->
+    <p><b>Job Description:</b></p>
+    <p style="color:#555;">
+        {{ item.obj.description }}
+    </p>
+
+    <!-- ✅ DEADLINE -->
+    <p>
+        <b>Apply Before:</b>
+        {{ item.obj.deadline|date:"M d, Y" }}
+    </p>
+    {% if item.obj.deadline < today %}
+        <p style="color: red;"><b>Deadline Passed</b></p>
+    {% endif %}
+    <!-- APPLY BUTTON -->
     {% if user.is_authenticated %}
-        <p><strong>Match:</strong> {{ item.match }}%</p>
-
-        
 
         {% if not user.studentprofile.phone or not user.studentprofile.college or not user.studentprofile.education or not user.studentprofile.skills or not user.studentprofile.resume %}
-            <button disabled class="btn btn-disabled">Complete Profile</button>
+            <button class="btn btn-disabled" disabled>Complete Profile</button>
 
         {% elif item.obj.id in applied_ids %}
-            <button disabled class="btn btn-disabled">Applied</button>
+            <button class="btn btn-disabled" disabled>Applied</button>
 
         {% else %}
             <a href="/apply/{{ item.obj.id }}/" class="btn">Apply</a>
 
-    
+        {% endif %}
 
-{% endif %}
     {% endif %}
 
 </div>
-
 {% endfor %}
+
 
 {% endblock %}
